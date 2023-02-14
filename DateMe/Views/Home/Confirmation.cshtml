@@ -1,0 +1,23 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "Application Submitted";
+
+
+}
+
+@model DateMe.Models.ApplicationResponse
+
+
+@if (Model.CreeperStalker == true)
+{
+    <h2>Application Rejected @Model.FirstName, you are a creep :)</h2>
+}
+else
+{
+    <h2>Application received. Thank you, @Model.FirstName</h2>
+}
+
+
+
