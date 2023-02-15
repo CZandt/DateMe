@@ -33,13 +33,15 @@ namespace DateMe.Migrations
                     b.Property<string>("LastName")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Major")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("MajorID")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Phone")
                         .HasColumnType("TEXT");
 
                     b.HasKey("ApplicationID");
+
+                    b.HasIndex("MajorID");
 
                     b.ToTable("responses");
 
@@ -51,7 +53,7 @@ namespace DateMe.Migrations
                             CreeperStalker = false,
                             FirstName = "Michael",
                             LastName = "Scott",
-                            Major = "Sales",
+                            MajorID = 1,
                             Phone = "555-555-5555"
                         },
                         new
@@ -61,9 +63,57 @@ namespace DateMe.Migrations
                             CreeperStalker = false,
                             FirstName = "Cole",
                             LastName = "Hardy",
-                            Major = "Information Systems",
+                            MajorID = 2,
                             Phone = "000-900-0000"
                         });
+                });
+
+            modelBuilder.Entity("DateMe.Models.Major", b =>
+                {
+                    b.Property<int>("MajorID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("MajorCode")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("MajorName")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("MajorID");
+
+                    b.ToTable("Majors");
+
+                    b.HasData(
+                        new
+                        {
+                            MajorID = 1,
+                            MajorName = "Information Systems"
+                        },
+                        new
+                        {
+                            MajorID = 2,
+                            MajorName = "Accounting"
+                        },
+                        new
+                        {
+                            MajorID = 3,
+                            MajorName = "Aerospace Engineering"
+                        },
+                        new
+                        {
+                            MajorID = 4,
+                            MajorName = "Undeclared"
+                        });
+                });
+
+            modelBuilder.Entity("DateMe.Models.ApplicationResponse", b =>
+                {
+                    b.HasOne("DateMe.Models.Major", "Major")
+                        .WithMany()
+                        .HasForeignKey("MajorID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

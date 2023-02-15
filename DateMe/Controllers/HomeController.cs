@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using DateMe.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace DateMe.Controllers
 {
@@ -13,12 +14,12 @@ namespace DateMe.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
-        private DateApplicationContext _blahContext { get; set; }
+        private DateApplicationContext _daContext { get; set; }
+        
 
-        public HomeController(ILogger<HomeController> logger, DateApplicationContext dac)
+        public HomeController(DateApplicationContext dac)
         {
-            _logger = logger;
-            _blahContext = dac;
+            _daContext = dac;
         }
 
         public IActionResult Index()
@@ -26,15 +27,23 @@ namespace DateMe.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        public IActionResult WaitList()
         {
-            return View();
-        }
+            var applications = _daContext.responses
+                .Include(x => x.Major)
+                .Where(x => x.CreeperStalker == false)
+                .OrderBy(x => x.LastName)
+                .ToList();
 
+            return View(applications);
+        }
 
         [HttpGet]
         public IActionResult DatingApplication() {
 
+            ViewBag.Majors = _daContext.Majors.ToList();
+
+            return View();
             return View();
 
         }
@@ -42,17 +51,15 @@ namespace DateMe.Controllers
         [HttpPost]
         public IActionResult DatingApplication(ApplicationResponse ar) {
 
-            _blahContext.Add(ar);
-            _blahContext.SaveChanges();
+            _daContext.Add(ar);
+            _daContext.SaveChanges();
 
             return View("Confirmation", ar);
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+
+        // [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)] Why tf is this here
+
     }
 }
 

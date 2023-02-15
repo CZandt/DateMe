@@ -1,0 +1,35 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "Wait List";
+}
+
+@model List<ApplicationResponse>;
+
+<table class="table table-bordered">
+
+    <thead class="font-weight-bold">
+        <tr>
+            <td>First Name</td>
+            <td>Last Name</td>
+            <td>Age</td>
+            <td>Phone</td>
+            <td>Major</td>
+            <td>Creeper / Stalker</td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var record in Model)
+        {
+            <tr>
+                <td>@record.FirstName</td>
+                <td>@record.LastName</td>
+                <td>@record.Age</td>
+                <td>@record.Phone</td>
+                <td>@record.Major.MajorName</td>
+                <td>@record.CreeperStalker</td>
+            </tr>
+        }
+    </tbody>
+</table>
